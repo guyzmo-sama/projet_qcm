@@ -2,16 +2,15 @@ import config from '/app/config.js';
 
 export default class LocalStorage
 {
-    setObject(cle, objet)
+    setObjet(key, value)
     {
-        Storage.prototype.setObjet = this.setItem(cle, JSON.stringify(objet));
-        
+         localStorage.setItem(key, JSON.stringify(value));
     }
 
-    getObject(cle)
+    getObjet(key)
     {
-        Storage.prototype.getObject =
-        let valeur = this.getItem(cle);
-        return valeur && JSON.parse(valeur);
+        let JsonValue = localStorage.getItem(key);
+        return JsonValue && JSON.parse(JsonValue);
+        //return valeur && JSON.parse(valeur);
     }
 }

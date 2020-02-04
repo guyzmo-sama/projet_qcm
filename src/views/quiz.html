@@ -1,6 +1,6 @@
 <section>
-	<h1>Créer votre QCM</h1>
-	<article>
+	<h1 id="titreH1Q">Créer votre QCM</h1>
+	<article class="createOneQuiz">
 		<h2>Le nom de votre QCM</h2>
 		<form name="createQuiz" id="createQuiz">
 			<label for="nameQCM">Le nom de votre quiz</label>
@@ -10,66 +10,44 @@
 			<input type="button" id="saveQuiz" value="Creer votre QCM">
 		</form>
 	</article>
+</section>
+<section id="createQuestion">
+	
+</section>
+<template id="templateQuestion">
 	<article>
-		<h2>Créer votre question</h2>
+		<h2 id="qcmName"></h2>
+		<h3 id="qcmDesc"></h3>
 		<form>
 			<fieldset>
 				<legend>Votre question</legend>
-				<fieldset>
-					<label class="question_title" for="question">
-						Entrer la question
-					</label>
-					<input type="text" name="question" id="question">
-				</fieldset>
-				<fieldset>
-					<label class="answer_title" for="reponse1">
-						Entrer la réponses 1
-					</label>
-					<input type="text" name="reponse1" id="reponse1">
-					<input class="check" type="radio" name="reponse1" id="vrai1" value="true" checked> <label class="true" for="vrai1">Vrai</label>
-					<input class="check" type="radio" name="reponse1" id="faux1" value="false"> <label class="false" for="faux1">faux</label>
-				</fieldset>
-				<fieldset>
-					<label class="answer_title" for="reponse2">
-						Entrer la réponses 2
-					</label>
-					<input type="text" name="reponse2" id="reponse2">
-					<input class="check" type="radio" name="reponse2" id="vrai2" value="true"> <label class="true" for="vrai2">Vrai</label>
-					<input class="check" type="radio" name="reponse2" id="faux2" value="false" checked> <label class="false" for="faux2">faux</label>
-				</fieldset>
-				<fieldset>
-					<label class="answer_title" for="reponse3">
-						Entrer la réponses 3
-					</label>
-					<input type="text" name="reponse3" id="reponse3">
-					<input class="check" type="radio" name="reponse3" id="vrai3" value="true"> <label class="true" for="vrai3">Vrai</label>
-					<input class="check" type="radio" name="reponse3" id="faux3" value="false" checked> <label class="false" for="faux3">faux</label>
-				</fieldset>
-				<fieldset>
-					<label class="answer_title" for="reponse4">
-						Entrer la réponses 4
-					</label>
-					<input type="text" name="reponse4" id="reponse4">
-					<input class="check" type="radio" name="reponse4" id="vrai4" value="true"> <label class="true" for="vrai4">Vrai</label>
-					<input class="check" type="radio" name="reponse4" id="faux4" value="false" checked> <label class="false" for="faux4">faux</label>
-				</fieldset>
-				<input type="button" id="addAnswer" value="Ajouter une réponse">
-				<input type="button" id="validateAnswer" value="Créer une autre Question">
-				<input type="button" id="validateQuiz" value="Enregistrer le quiz">
+				<label class="question_title" for="question">
+					Entrer la question
+				</label>
+				<input type="text" name="question" id="question">
 			</fieldset>
 		</form>
 	</article>
-</section>
-
-
-
-<!-- <section id="result">
-</section>
-<template id="blockResultat">
-	<article>
-		<h4></h4>
-		<p class="strong"><strong></strong></p>
-		<p class="mod"></p>
-		<p class="coo"></p>
+	<article id="createAnswer">
+		
 	</article>
-</template> -->
+	<div class="buttonGroup">
+		<input type="button" id="addAnswer" value="Ajouter une réponse">
+		<input type="button" id="removeAnswer" value="supprimer la réponse">
+		<input type="button" id="validateQuestion" value="Créer une autre Question">
+		<input type="button" id="validateQuiz" value="Enregistrer le quiz">
+	</div>
+</template>
+<template id="templateAnswers">
+	<form class="formAnswer" id="">
+		<fieldset>
+			<legend class="answerTilte"></legend>
+			<label class="answerTexte" for="">
+
+			</label>
+			<input class="answer" type="text" name="" id="">
+			<input class="checkT" type="radio" name="" id="" value="true" checked> <label class="true" for="">Bonne réponse</label>
+			<input class="checkF" type="radio" name="" id="" value="false"> <label class="false" for="">Mauvaise réponse</label>
+		</fieldset>
+	</form>
+</template>
