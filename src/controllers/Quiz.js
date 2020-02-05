@@ -16,17 +16,16 @@ export default class Quiz
 	listener() 
 	{
 		let numberOfClick = 0;
-		let numberQuestion = 0;
 
         document.getElementById('saveQuiz').addEventListener('click',() => {
 
         	let where = "questionPart";
         	let key = document.getElementById("nameQCM").value;
-        	let value = new Object();
+        	let valueObjet = new Object();
 
-        	value["descQCM"] = document.getElementById("descQCM").value;
+        	valueObjet["descQCM"] = document.getElementById("descQCM").value;
 
-			this.saveQuiz(where, key, value);
+			this.saveQuiz(where, key, valueObjet);
         });
         
         if (document.getElementById('addAnswer') != null) {
@@ -36,7 +35,7 @@ export default class Quiz
 				}
 				numberOfClick += 1;
         		this.showTheAnswerPart(numberOfClick);
-        		console.log(numberOfClick)
+        		//console.log(numberOfClick)
         	});
         }
 
@@ -47,7 +46,7 @@ export default class Quiz
 				}
         		this.removeTheAnswerPart(numberOfClick);
         		numberOfClick -= 1;
-        		console.log(numberOfClick)
+        		//console.log(numberOfClick)
         	});
         }
 
@@ -58,50 +57,69 @@ export default class Quiz
         		let qcmName = document.getElementById("qcmName");
         		let key = qcmName.innerText || qcmName.textContent;
 
-        		//let value = new Object();
-        		//let qcmDesc = document.getElementById("qcmDesck");
-        		//value["descQCM"] = qcmDesc.innerText || qcmDesc.textContent;
-        		value[`questionQCM${numberQuestion}QCM`] = document.getElementById("question").value;
-        		value[`Reponse${nbrClick}QCM`] = document.getElementById(`Reponse${nbrClick}`).value;
-        		for each (document.getElementById(`Reponse${nbrClick}`).value) {
-        			if (document.getElementById("true${nbrClick}").checked) {
-        				value["valeur"] = "correcte";
-        			}
-        			else if (document.querySelector(".checkF").checked) {
-        				value["valeur"] = "fausse";
-        			}
-        		}
+        		let valueObjet = [];
+        		
 
-				this.saveQuiz(where, key, value);
+        		//valueObjet[`reponse`] = [];
+        		valueObjet[`question`] = document.getElementById("question").value;
+        		let answers = document.getElementsByClassName("answer");
+        		//answers.forEach( function(theAnswer)
+        		for ( let i=0; i < answers.length; i++){
+        			let oneReponse = [];
+        			let trueOrFalse = document.querySelector(".check").value;
+        			if (trueOrFalse === "true"){
+        				oneReponse["valeur"] ="vrai";
+        			}
+        			else{
+        				oneReponse["valeur"] ="faux";
+        			}
+        			//console.log(answers[i].value);
+        			oneReponse[`réponse${i+1}`] = answers[i].value;
+        			//console.log(oneReponse);
+        			//valueObjet[`reponse`].push(oneReponse);
+    				//console.log(valueObjet);
+					//this.saveQuiz(where, key, valueObjet);	
+        		}
+        		console.log(valueObjet);
+        		this.saveQuiz(where, key, valueObjet);
+        		
         	});
         }
         if (document.getElementById('validateQuiz') != null) {
         	document.getElementById('validateQuiz').addEventListener('click',() => {
         		let where = "ValidQCM";
         		
-				this.saveQuiz(where, key, value);
+				this.saveQuiz(where, key, valueObjet);
         	});
         }
     }
 
-    saveQuiz(where, key, value)
+    saveQuiz(where, key, valueObjet)
     {
 
-    	
-    	if (where === "questionPart") {
-    		let myLocalStorage = new LocalStorage();
+    	let myLocalStorage = new LocalStorage();
 
-    		myLocalStorage.setObjet(key, value);
+    	if (where === "questionPart") {
+
+    		myLocalStorage.setObjet(key, valueObjet);
     		this.showTheQuestionPart(key);
     	}
+
     	else if (where === "nextQuestion") {
-    		let question = getObjet(key);
-        	question.push(value)
-        	setObjet(question, JSON.stringify(questions)); 
+
+			let qcm = new Array;
+			//qcm.push(myLocalStorage.getObjet(key));
+			//console.log(qcm);
+			qcm.push(valueObjet);
+			console.log(qcm);
+    		myLocalStorage.setObjet(key, valueObjet);
+    		//this.showTheQuestionPart(key);
     	}
+
     	else if (where === "ValidQCM") {
     		window.location = "/#/";
     	}
+
     	else {
     		alert("STOP !!!!");
     	}
@@ -116,7 +134,7 @@ export default class Quiz
     	let hidenCreateQuiz = document.querySelector(".createOneQuiz");
 		hidenCreateQuiz.style.display="none";
 		let titreH1 = document.getElementById("titreH1Q");
-		titreH1.innerHTML ="Créer vos quéstions";
+		titreH1.innerHTML ="Créer vos questions";
 
     	let sectionQ = document.getElementById("createQuestion");
         sectionQ.innerHTML = "";
@@ -124,8 +142,7 @@ export default class Quiz
     	let templateQ = document.getElementById("templateQuestion");
     	let cloneQ = document.importNode(templateQ.content, true);
 
-    	cloneQ.getElementById("qcmName").textContent = `Pour le QCM : ${key}`;
-    	cloneQ.getElementById("qcmDesc").textContent = `Description : ${descQcm[0]}`;
+    	cloneQ.getElementById("qcmName").textContent = `${key}`;
     	sectionQ.appendChild(cloneQ);
     	this.listener();
     }
@@ -144,12 +161,9 @@ export default class Quiz
     	cloneA.querySelector(".answerTexte").setAttribute("for",`Réponse${nbrClick}`);
     	cloneA.querySelector(".answer").setAttribute("name",`Reponse${nbrClick}`);
     	cloneA.querySelector(".answer").setAttribute("id",`Reponse${nbrClick}`);
-    	cloneA.querySelector(".checkT").setAttribute("name",`Reponse${nbrClick}`);
-    	cloneA.querySelector(".checkT").setAttribute("id",`true${nbrClick}`);
-    	cloneA.querySelector(".checkF").setAttribute("name",`Reponse${nbrClick}`);
-    	cloneA.querySelector(".checkF").setAttribute("id",`false${nbrClick}`);
-    	cloneA.querySelector(".true").setAttribute("for",`Reponse${nbrClick}`);
-    	cloneA.querySelector(".false").setAttribute("for",`Reponse${nbrClick}`);
+    	cloneA.querySelector(".check").setAttribute("name",`Reponse${nbrClick}`);
+    	cloneA.querySelector(".check").setAttribute("id",`true${nbrClick}`);
+
 
     	articleA.appendChild(cloneA);
     }

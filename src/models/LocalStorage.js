@@ -4,7 +4,8 @@ export default class LocalStorage
 {
     setObjet(key, value)
     {
-         localStorage.setItem(key, JSON.stringify(value));
+        //console.log(value);
+        localStorage.setItem(key, JSON.stringify(value));
     }
 
     getObjet(key)
