@@ -1,5 +1,6 @@
 import app from '/app/app.js';
 import LocalStorage from '/src/models/LocalStorage.js';
+let myLocalStorage = new LocalStorage();
 
 export default class Home
 {
@@ -21,23 +22,29 @@ export default class Home
 		*/
 	}
 
-	listener()
-	{
-		/*document.getElementById('afficheQCM').addEventListener('click',() => {
+	afficheQCM(){
+		window.addEventListener("DOMContentLoaded", (event) => {
+			let keys = this.recupKeys();
+			console.log(keys);
+			keys.forEach(key => {
+				console.log(key);
 
-        	let where = "questionPart";
-        	let key = document.getElementById("nameQCM").value;
-        	let valueObjet = new Object();
+				let tableA = document.getElementById("afficheQuestion");
+				let templateA = document.getElementById("templateAfficher");
 
-        	valueObjet["descQCM"] = document.getElementById("descQCM").value;
+				let cloneA = document.importNode(templateA.content, true);
 
-			this.saveQuiz(where, key, valueObjet);
-        });*/
+				cloneA.querySelector("#qcmTitre").textContent= `Réponse n°`;
+				cloneA.querySelector("#question").textContent = `Réponse n°`;
+
+				articleA.appendChild(cloneA);
+			});
+		});
+
 	}
 
-	afficheQCM(){
-		let myLocalStorage = new LocalStorage();
-		let storage = Object.values(myLocalStorage.getObjet('QCM'));
-    	console.log(storage);		
+	recupKeys(){
+		let theKeys = Object.values(myLocalStorage.getObjet('theKeys'));
+		return theKeys;
 	}
 }

@@ -1,9 +1,9 @@
 import app from '/app/app.js';
 import LocalStorage from '/src/models/LocalStorage.js';
-
+let myLocalStorage = new LocalStorage();
+let theKeys = [];
 export default class Quiz
 {
-
 	show()
 	{
 		app.mvc.loadView(`quiz`).then(() =>{
@@ -16,14 +16,14 @@ export default class Quiz
 	listener() 
 	{
 		let numberOfClick = 0;
+		let valueObjet = {};
 
         document.getElementById('saveQuiz').addEventListener('click',() => {
 
         	let where = "questionPart";
         	let key = document.getElementById("nameQCM").value;
-        	let valueObjet = new Object();
 
-        	valueObjet["descQCM"] = document.getElementById("descQCM").value;
+        	valueObjet.descQCM = document.getElementById("descQCM").value;
 
 			this.saveQuiz(where, key, valueObjet);
         });
@@ -52,44 +52,54 @@ export default class Quiz
 
         if (document.getElementById('validateQuestion') != null) {
         	document.getElementById('validateQuestion').addEventListener('click',() => {
-        		let where = "nextQuestion";
-
         		let qcmName = document.getElementById("qcmName");
         		let key = qcmName.innerText || qcmName.textContent;
+        		valueObjet = myLocalStorage.getObjet(key)||{};
+        		let where = "nextQuestion";
 
-        		let valueObjet = [];
         		
+        		let question = document.getElementById("question").value;
 
-        		//valueObjet[`reponse`] = [];
-        		valueObjet[`question`] = document.getElementById("question").value;
+				//console.log(question);
+				if(typeof valueObjet.questions == "undefined") valueObjet.questions = [];
+        		valueObjet.questions.push({text: question, reponses : []});
+        		
         		let answers = document.getElementsByClassName("answer");
-        		//answers.forEach( function(theAnswer)
+        		
         		for ( let i=0; i < answers.length; i++){
-        			let oneReponse = [];
-        			let trueOrFalse = document.querySelector(".check").value;
-        			if (trueOrFalse === "true"){
-        				oneReponse["valeur"] ="vrai";
-        			}
-        			else{
-        				oneReponse["valeur"] ="faux";
-        			}
-        			//console.log(answers[i].value);
-        			oneReponse[`réponse${i+1}`] = answers[i].value;
-        			//console.log(oneReponse);
-        			//valueObjet[`reponse`].push(oneReponse);
-    				//console.log(valueObjet);
-					//this.saveQuiz(where, key, valueObjet);	
+        			
+        			let trueOrFalse = document.querySelector(`#check${i+1}`).checked;
+
+        			valueObjet.questions[valueObjet.questions.length-1].reponses.push({text :answers[i].value, valeur : trueOrFalse});	
         		}
         		console.log(valueObjet);
-        		this.saveQuiz(where, key, valueObjet);
-        		
+        		this.saveQuiz(where, key, valueObjet);	
         	});
         }
         if (document.getElementById('validateQuiz') != null) {
         	document.getElementById('validateQuiz').addEventListener('click',() => {
+        		let qcmName = document.getElementById("qcmName");
+        		let key = qcmName.innerText || qcmName.textContent;
+        		valueObjet = myLocalStorage.getObjet(key)||{};
         		let where = "ValidQCM";
+
         		
-				this.saveQuiz(where, key, valueObjet);
+        		let question = document.getElementById("question").value;
+
+				//console.log(question);
+				if(typeof valueObjet.questions == "undefined") valueObjet.questions = [];
+        		valueObjet.questions.push({text : question, reponses : []});
+        		
+        		let answers = document.getElementsByClassName("answer");
+        		
+        		for ( let i=0; i < answers.length; i++){
+        			
+        			let trueOrFalse = document.querySelector(`#check${i+1}`).checked;
+
+        			valueObjet.questions[valueObjet.questions.length-1].reponses.push({text :answers[i].value, valeur : trueOrFalse});	
+        		}
+        		this.saveKeys(key);
+        		this.saveQuiz(where, key, valueObjet);
         	});
         }
     }
@@ -97,29 +107,25 @@ export default class Quiz
     saveQuiz(where, key, valueObjet)
     {
 
-    	let myLocalStorage = new LocalStorage();
-
     	if (where === "questionPart") {
 
     		myLocalStorage.setObjet(key, valueObjet);
     		this.showTheQuestionPart(key);
     	}
 
-    	else if (where === "nextQuestion") {
+    	else if (where === "nextQuestion" || where === "ValidQCM") {
 
-			let qcm = new Array;
-			//qcm.push(myLocalStorage.getObjet(key));
+			
+			//let qcm = valueObjet;// {...myLocalStorage.getObjet(key)||{}, ...valueObjet};
 			//console.log(qcm);
-			qcm.push(valueObjet);
-			console.log(qcm);
     		myLocalStorage.setObjet(key, valueObjet);
-    		//this.showTheQuestionPart(key);
+    		if (where === "nextQuestion") {
+    			this.showTheQuestionPart(key);
+    		}
+    		else if (where === "ValidQCM") {
+    			window.location = "/#/";
+    		}
     	}
-
-    	else if (where === "ValidQCM") {
-    		window.location = "/#/";
-    	}
-
     	else {
     		alert("STOP !!!!");
     	}
@@ -127,10 +133,6 @@ export default class Quiz
 
     showTheQuestionPart(key)
     {
-    	let myLocalStorage = new LocalStorage();
-    	let descQcm = Object.values(myLocalStorage.getObjet(key));
-    	//console.log(descQcm[0]);
-
     	let hidenCreateQuiz = document.querySelector(".createOneQuiz");
 		hidenCreateQuiz.style.display="none";
 		let titreH1 = document.getElementById("titreH1Q");
@@ -162,8 +164,7 @@ export default class Quiz
     	cloneA.querySelector(".answer").setAttribute("name",`Reponse${nbrClick}`);
     	cloneA.querySelector(".answer").setAttribute("id",`Reponse${nbrClick}`);
     	cloneA.querySelector(".check").setAttribute("name",`Reponse${nbrClick}`);
-    	cloneA.querySelector(".check").setAttribute("id",`true${nbrClick}`);
-
+    	cloneA.querySelector(".check").setAttribute("id",`check${nbrClick}`);
 
     	articleA.appendChild(cloneA);
     }
@@ -174,9 +175,11 @@ export default class Quiz
         removeAnswer.parentNode.removeChild(removeAnswer);
     }
 
-    creatOtherQuestion()
+    saveKeys(key)
     {
-
+    	theKeys.push(key);
+    	console.log(theKeys);
+    	myLocalStorage.setObjet("theKeys", theKeys);
     }
 
 }
