@@ -25,9 +25,9 @@ function initializeRouter() {
         QuizController.show();
     })
 
-    app.mvc.router.add('/about', ()  =>{
-        let AboutController = new About();
-        AboutController.show();
+    app.mvc.router.add('/leqcm', ()  =>{
+        let LeqcmController = new Leqcm();
+        LeqcmController.show();
     })
 
     app.mvc.router.add('/login', ()  =>{

@@ -7,7 +7,7 @@
 			<input type="text" name="nameQCM" id="nameQCM">
 			<label for="descQCM">Description de votre quiz</label>
 			<input type="text" name="descQCM" id="descQCM" placeholder="Petit QCM sur la création de QCM (facile)">
-			<input type="button" id="saveQuiz" value="Creer votre QCM">
+			<input type="button" id="saveQuiz" value="Creer votre QCM" aria-label="créer un quiz">
 		</form>
 	</article>
 </section>
@@ -31,10 +31,10 @@
 		
 	</article>
 	<div class="buttonGroup">
-		<input type="button" id="addAnswer" value="Ajouter une réponse">
-		<input type="button" id="removeAnswer" value="supprimer la réponse">
-		<input type="button" class="theQuiz" id="validateQuestion" value="Créer une autre Question">
-		<input type="button" class="theQuiz" id="validateQuiz" value="Enregistrer le quiz">
+		<input type="button" id="addAnswer" value="Ajouter une réponse" aria-label="ajouter une réponse">
+		<input type="button" id="removeAnswer" value="supprimer la réponse" aria-label="supprimer une réponse">
+		<input type="button" class="theQuiz" id="validateQuestion" value="Créer une autre Question" aria-label="Créer une autre Question">
+		<input type="button" class="theQuiz" id="validateQuiz" value="Enregistrer le quiz" aria-label="Enregistrer le quiz">
 	</div>
 </template>
 <template id="templateAnswers">
